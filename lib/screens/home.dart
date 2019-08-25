@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ung_ubru/screens/my_service.dart';
 import 'package:ung_ubru/screens/register.dart';
 
 class Home extends StatefulWidget {
@@ -8,8 +10,25 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   // Explicit
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   // Method
+  @override
+  void initState() {
+    super.initState();
+    checkStatus();
+  }
+
+  Future<void> checkStatus() async {
+    FirebaseUser firebaseUser = await firebaseAuth.currentUser();
+    if (firebaseUser != null) {
+      MaterialPageRoute materialPageRoute =
+          MaterialPageRoute(builder: (BuildContext context) => MyService());
+      Navigator.of(context).pushAndRemoveUntil(
+          materialPageRoute, (Route<dynamic> route) => false);
+    }
+  }
+
   Widget mySizebox() {
     return SizedBox(
       width: 5.0,
@@ -40,9 +59,9 @@ class _HomeState extends State<Home> {
         onPressed: () {
           print('You Click SingUp');
 
-          MaterialPageRoute materialPageRoute = MaterialPageRoute(builder: (BuildContext context) => Register()); 
-          Navigator.of(context).push(materialPageRoute);                 
-
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext context) => Register());
+          Navigator.of(context).push(materialPageRoute);
         },
       ),
     );
