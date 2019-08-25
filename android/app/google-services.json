@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "866488018882",
+    "firebase_url": "https://ungubru.firebaseio.com",
+    "project_id": "ungubru",
+    "storage_bucket": "ungubru.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:866488018882:android:2bb1b3498490ccc2",
+        "android_client_info": {
+          "package_name": "th.in.androidthai.ung_ubru"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "866488018882-h2ch80j3bs343vmphj6qc317s3k98lh9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBer1fEpr2XtmBAXHI56ZKmaOatIML4pZ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "866488018882-h2ch80j3bs343vmphj6qc317s3k98lh9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
