@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -12,6 +13,7 @@ class _RegisterState extends State<Register> {
   Color passwordColor = Colors.pink.shade400;
   final formKey = GlobalKey<FormState>();
   String nameString, emailString, passwordString;
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   // Method
 
@@ -33,7 +35,8 @@ class _RegisterState extends State<Register> {
         if (value.isEmpty) {
           return 'Please Fill Name in Blank';
         }
-      },onSaved: (String value){
+      },
+      onSaved: (String value) {
         nameString = value;
       },
     );
@@ -53,11 +56,13 @@ class _RegisterState extends State<Register> {
         helperText: 'Type Your Email',
         helperStyle: TextStyle(color: emailColor),
         hintText: 'you@email.com',
-      ),validator: (String value){
+      ),
+      validator: (String value) {
         if (!((value.contains('@')) && (value.contains('.')))) {
           return 'Please Type Email Format';
         }
-      },onSaved: (String value){
+      },
+      onSaved: (String value) {
         emailString = value;
       },
     );
@@ -76,11 +81,13 @@ class _RegisterState extends State<Register> {
         helperText: 'Type Your Password',
         helperStyle: TextStyle(color: passwordColor),
         hintText: 'More 6 Charactor',
-      ),validator: (String value){
+      ),
+      validator: (String value) {
         if (value.length < 6) {
           return 'Password More 6 Charator';
         }
-      },onSaved: (String value){
+      },
+      onSaved: (String value) {
         passwordString = value;
       },
     );
@@ -92,10 +99,24 @@ class _RegisterState extends State<Register> {
       onPressed: () {
         if (formKey.currentState.validate()) {
           formKey.currentState.save();
-          print('name = $nameString, email = $emailString, password = $passwordString');
+          print(
+              'name = $nameString, email = $emailString, password = $passwordString');
+          registerThread();
         }
       },
     );
+  }
+
+  Future<void> registerThread() async {
+    await firebaseAuth
+        .createUserWithEmailAndPassword(
+            email: emailString, password: passwordString)
+        .then((response) {
+          print('Success Register');
+        })
+        .catchError((response) {
+          print('response = ${response.toString()}');
+        });
   }
 
   @override
