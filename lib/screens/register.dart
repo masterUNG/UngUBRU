@@ -8,6 +8,10 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: Text('Register'),),);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Register'),
+      ),body: Text('body'),
+    );
   }
 }
