@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ung_ubru/screens/home.dart';
+import 'package:ung_ubru/screens/list_product.dart';
+import 'package:ung_ubru/screens/show_map.dart';
 
 class MyService extends StatefulWidget {
   @override
@@ -11,6 +13,9 @@ class _MyServiceState extends State<MyService> {
   // Explicit
   String loginString = '';
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  double mySizeIcon = 36.0;
+  double h2 = 18.0;
+  Widget myWidget = ListProduct();
 
   // Method
   @override
@@ -19,10 +24,56 @@ class _MyServiceState extends State<MyService> {
     findDisplayName();
   }
 
+  Widget listProductMenu() {
+    return ListTile(
+      leading: Icon(
+        Icons.home,
+        size: mySizeIcon,
+      ),
+      title: Text(
+        'List Product',
+        style: TextStyle(fontSize: h2),
+      ),
+      subtitle: Text('Show List All Product'),
+      onTap: () {
+        setState(() {
+          myWidget = ListProduct();
+          Navigator.of(context).pop();
+        });
+      },
+    );
+  }
+
+  Widget mapMenu() {
+    return ListTile(
+      leading: Icon(
+        Icons.map,
+        size: mySizeIcon,
+      ),
+      title: Text(
+        'Show Map',
+        style: TextStyle(fontSize: h2),
+      ),
+      subtitle: Text('Show Show Current Location Map'),
+      onTap: (){
+        setState(() {
+          myWidget = ShowMap();
+          Navigator.of(context).pop();
+        });
+      },
+    );
+  }
+
   Widget signOutMenu() {
     return ListTile(
-      leading: Icon(Icons.android),
-      title: Text('Sign Out'),
+      leading: Icon(
+        Icons.cached,
+        size: mySizeIcon,
+      ),
+      title: Text(
+        'Sign Out',
+        style: TextStyle(fontSize: h2),
+      ),
       onTap: () {
         processSignOut();
       },
@@ -93,6 +144,8 @@ class _MyServiceState extends State<MyService> {
       child: ListView(
         children: <Widget>[
           myHeadDrawer(),
+          listProductMenu(),
+          mapMenu(),
           signOutMenu(),
         ],
       ),
@@ -105,7 +158,7 @@ class _MyServiceState extends State<MyService> {
       appBar: AppBar(
         title: Text('My Service'),
       ),
-      body: Text('body'),
+      body: myWidget,
       drawer: myDrewerMenu(),
     );
   }
