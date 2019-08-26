@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ung_ubru/screens/home.dart';
 
 class MyService extends StatefulWidget {
   @override
@@ -18,6 +19,25 @@ class _MyServiceState extends State<MyService> {
     findDisplayName();
   }
 
+  Widget signOutMenu() {
+    return ListTile(
+      leading: Icon(Icons.android),
+      title: Text('Sign Out'),
+      onTap: () {
+        processSignOut();
+      },
+    );
+  }
+
+  Future<void> processSignOut() async {
+    await firebaseAuth.signOut().then((response) {
+      MaterialPageRoute materialPageRoute =
+          MaterialPageRoute(builder: (BuildContext context) => Home());
+      Navigator.of(context).pushAndRemoveUntil(
+          materialPageRoute, (Route<dynamic> route) => false);
+    });
+  }
+
   Future<void> findDisplayName() async {
     FirebaseUser firebaseUser = await firebaseAuth.currentUser();
     setState(() {
@@ -29,7 +49,7 @@ class _MyServiceState extends State<MyService> {
   Widget showLogin() {
     return Text(
       'Login by ... $loginString',
-      style: TextStyle(fontSize: 16.0),
+      style: TextStyle(fontSize: 16.0, color: Colors.white),
     );
   }
 
@@ -56,8 +76,7 @@ class _MyServiceState extends State<MyService> {
     return DrawerHeader(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('images/sun.jpg'),fit: BoxFit.fill
-        ),
+            image: AssetImage('images/sun.jpg'), fit: BoxFit.fitHeight),
       ),
       child: Column(
         children: <Widget>[
@@ -74,6 +93,7 @@ class _MyServiceState extends State<MyService> {
       child: ListView(
         children: <Widget>[
           myHeadDrawer(),
+          signOutMenu(),
         ],
       ),
     );
