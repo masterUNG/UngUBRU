@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Authen extends StatefulWidget {
@@ -8,15 +9,29 @@ class Authen extends StatefulWidget {
 class _AuthenState extends State<Authen> {
   // Explicit
   Color myColor = Colors.green.shade900;
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  String email = '', password = '';
+  final formKey = GlobalKey<FormState>();
 
   // Method
 
   Widget loginButton() {
     return FloatingActionButton(
       backgroundColor: myColor,
-      child: Icon(Icons.navigate_next, size: 36.0,),
-      onPressed: () {},
+      child: Icon(
+        Icons.navigate_next,
+        size: 36.0,
+      ),
+      onPressed: () {
+        formKey.currentState.save();
+        print('email = $email, password = $password');
+        // checkAuthen();
+      },
     );
+  }
+
+  Future<void> checkAuthen() async {
+    await firebaseAuth.signInWithEmailAndPassword();
   }
 
   Widget backButton() {
@@ -43,7 +58,9 @@ class _AuthenState extends State<Authen> {
         ),
         labelText: 'Email :',
         labelStyle: TextStyle(color: myColor),
-      ),
+      ),onSaved: (String value){
+        email = value;
+      },
     );
   }
 
@@ -58,7 +75,9 @@ class _AuthenState extends State<Authen> {
         ),
         labelText: 'Password :',
         labelStyle: TextStyle(color: myColor),
-      ),
+      ),onSaved: (String value){
+        password = value;
+      },
     );
   }
 
@@ -91,14 +110,17 @@ class _AuthenState extends State<Authen> {
         padding: EdgeInsets.all(20.0),
         color: Color.fromRGBO(255, 255, 255, 0.7),
         width: 300.0,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            showName(),
-            emailText(),
-            passwordText(),
-          ],
+        child: Form(
+          key: formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              showName(),
+              emailText(),
+              passwordText(),
+            ],
+          ),
         ),
       ),
     );
