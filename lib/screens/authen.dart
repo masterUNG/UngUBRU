@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ung_ubru/screens/my_service.dart';
 
 class Authen extends StatefulWidget {
   @override
@@ -25,13 +26,60 @@ class _AuthenState extends State<Authen> {
       onPressed: () {
         formKey.currentState.save();
         print('email = $email, password = $password');
-        // checkAuthen();
+        checkAuthen();
       },
     );
   }
 
   Future<void> checkAuthen() async {
-    await firebaseAuth.signInWithEmailAndPassword();
+    await firebaseAuth
+        .signInWithEmailAndPassword(email: email, password: password)
+        .then((response) {
+      MaterialPageRoute materialPageRoute =
+          MaterialPageRoute(builder: (BuildContext context) => MyService());
+      Navigator.of(context).pushAndRemoveUntil(
+          materialPageRoute, (Route<dynamic> route) => false);
+    }).catchError((response) {
+      String title = response.code;
+      String message = response.message;
+      myAlert(title, message);
+    });
+  }
+
+  void myAlert(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: showTitle(title),
+          content: Text(message),
+          actions: <Widget>[okButton()],
+        );
+      },
+    );
+  }
+
+  Widget okButton() {
+    return FlatButton(
+      child: Text('OK'),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+  }
+
+  Widget showTitle(String title) {
+    return ListTile(
+      leading: Icon(
+        Icons.add_alert,
+        color: Colors.red,
+        size: 48.0,
+      ),
+      title: Text(
+        title,
+        style: TextStyle(color: Colors.red),
+      ),
+    );
   }
 
   Widget backButton() {
@@ -58,7 +106,8 @@ class _AuthenState extends State<Authen> {
         ),
         labelText: 'Email :',
         labelStyle: TextStyle(color: myColor),
-      ),onSaved: (String value){
+      ),
+      onSaved: (String value) {
         email = value;
       },
     );
@@ -75,7 +124,8 @@ class _AuthenState extends State<Authen> {
         ),
         labelText: 'Password :',
         labelStyle: TextStyle(color: myColor),
-      ),onSaved: (String value){
+      ),
+      onSaved: (String value) {
         password = value;
       },
     );
