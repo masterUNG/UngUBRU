@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ung_ubru/models/product_model.dart';
+import 'package:ung_ubru/screens/detail.dart';
 
 class ListProduct extends StatefulWidget {
   @override
@@ -45,8 +46,48 @@ class _ListProductState extends State<ListProduct> {
 
   Widget showImage(int index) {
     return Container(
+      padding: EdgeInsets.all(16.0),
+      // color: Colors.grey,
+      width: MediaQuery.of(context).size.width * 0.5 - 20.0,
+      child: Image.network(
+        productModels[index].path,
+        fit: BoxFit.contain,
+      ),
+    );
+  }
+
+  Widget showName(int index) {
+    return Container(
+      alignment: Alignment.topRight,
+      child: Text(
+        productModels[index].name,
+        style: TextStyle(fontSize: 30.0, color: Colors.purple),
+      ),
+    );
+  }
+
+  Widget showDetail(int index) {
+    String detail = productModels[index].detail;
+    detail = detail.substring(1, 60);
+    detail = '$detail ...';
+    Color textColor = Colors.black;
+    index % 2 == 0 ? textColor = Colors.black : textColor = Colors.white;
+    return Text(
+      detail,
+      style: TextStyle(color: textColor),
+    );
+  }
+
+  Widget showText(int index) {
+    return Container(
       width: MediaQuery.of(context).size.width * 0.5,
-      child: Image.network(productModels[index].path,fit: BoxFit.contain,),
+      height: MediaQuery.of(context).size.width * 0.5,
+      child: Column(
+        children: <Widget>[
+          showName(index),
+          showDetail(index),
+        ],
+      ),
     );
   }
 
@@ -54,8 +95,27 @@ class _ListProductState extends State<ListProduct> {
     return ListView.builder(
       itemCount: productModels.length,
       itemBuilder: (BuildContext context, int index) {
-        return Row(
-          children: <Widget>[showImage(index),],
+        return GestureDetector(
+          child: Container(
+            padding: EdgeInsets.all(10.0),
+            decoration: index % 2 == 0
+                ? BoxDecoration(color: Colors.blue.shade200)
+                : BoxDecoration(color: Colors.blue.shade400),
+            child: Row(
+              children: <Widget>[
+                showImage(index),
+                showText(index),
+              ],
+            ),
+          ),
+          onTap: () {
+            print('You Click index = $index');
+            MaterialPageRoute materialPageRoute = MaterialPageRoute(
+                builder: (BuildContext context) => Detail(
+                      productModel: productModels[index],
+                    ));
+            Navigator.of(context).push(materialPageRoute);
+          },
         );
       },
     );
