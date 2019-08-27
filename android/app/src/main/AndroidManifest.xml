@@ -2,6 +2,7 @@
     package="th.in.androidthai.ung_ubru">
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
@@ -12,6 +13,10 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="Ung UBRU"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyAJMBDfdYpaQ6rKhv45WhNsyQcpN1TMEAc"/>
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
